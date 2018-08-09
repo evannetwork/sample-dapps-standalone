@@ -1,0 +1,18 @@
+{
+  "name": "hello-word-bcc",
+  "version": "1.0.0",
+  "author": "Evan",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "dependencies": { },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "API",
+    "Angular 5",
+    "Ionic",
+    "DApp",
+    "SASS",
+    "tutorial"
+  ]
+}

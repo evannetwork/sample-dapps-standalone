@@ -1,0 +1,96 @@
+<!--
+  Copyright (c) 2018-present evan GmbH.
+ 
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+ 
+      http://www.apache.org/licenses/LICENSE-2.0
+ 
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World Standalone</title>
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4e8ef7">
+
+    <!-- add to homescreen for ios -->
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="apple-touch-startup-image" href="logo.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#023845">
+
+    <link rel="stylesheet" href="index.css" async>
+    <link rel="stylesheet" type="text/css" async href="//fonts.googleapis.com/css?family=Open+Sans" />
+
+    <!-- Loading DBCP -->
+    <script src="https://ipfs.evan.network/ipns/QmdWqqkKaiqhqRgsq3HeaxwUHVREb5HUFF12KBrj3gYbTx"></script>
+  
+    <!-- Loading Web3 -->
+    <script src="https://ipfs.evan.network/ipfs/QmXVX173ygohnfg8rxzhynrNFHLTLKUqcBEKAFrEZGA9JN"></script>
+  
+    <!-- Loading ipfs-api -->
+    <script src="https://ipfs.evan.network/ipfs/QmczFSf23jB7RhT5ptnkycCf57hTGdfUE1Pa2qbZe4pmEN"></script>
+     
+  </head>
+  
+  <body>
+    <div>
+      <h2>Hello World DBCP</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Contract ID</td>
+            <td id="contract-id">---</td>
+          </tr>
+          <tr>
+            <td>Owner</td>
+            <td id="owner">---</td>
+          </tr>
+          <tr>
+            <td>Sample 1</td>
+            <td id="sample1">---</td>
+          </tr>
+          <tr>
+            <td>Sample 2</td>
+            <td id="sample2">---</td>
+          </tr>
+          <tr>
+            <td>Contract Methods</td>
+            <td>
+              <textarea rows="10" id="contract-methods" value="---"></textarea>
+            </td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td>
+              <textarea rows="30" id="test-description"></textarea>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Start the application -->
+    <script src="index.js"></script>
+  </body>
+</html>
