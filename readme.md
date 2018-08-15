@@ -28,4 +28,5 @@ npm run deploy-to-contract hello-world-bcc
 ```
 
 ## Deploy to ENS
-Have a look [dapp-browser deployment](https://github.com/evannetwork/ui-dapp-browser#ens-deployment).
+
+Have a look at the [deployment description](https://evannetwork.github.io/dev/deployment).
