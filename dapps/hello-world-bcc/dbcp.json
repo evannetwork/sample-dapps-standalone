@@ -1,6 +1,6 @@
 {
   "public": {
-    "author": "evan",
+    "author": "evan GmbH",
     "dapp": {
       "dependencies": { },
       "entrypoint": "index.html",

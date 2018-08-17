@@ -1,7 +1,7 @@
 {
   "name": "hello-word-bcc",
   "version": "1.0.0",
-  "author": "Evan",
+  "author": "evan GmbH",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "dependencies": { },
