@@ -1,7 +1,7 @@
 {
   "license": "Apache-2.0",
   "dependencies": {
-    "@evan.network/dbcp": "^1.5.1",
+    "@evan.network/dbcp": "^1.5.2",
     "express": "^4.16.2",
     "gulp": "^3.9.1",
     "ipfs-api": "^17.5.0",
