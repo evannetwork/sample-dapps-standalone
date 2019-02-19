@@ -55,7 +55,7 @@ const runtimeConfig = {
     '0x001De828935e8c7e4cb56Fe610495cAe63fb2612':
       '01734663843202e2245e5796cb120510506343c67915eb4f9348ac0d8c2cf22a',
   },
-  ipfs: { host: 'ipfs.evan.network', port: '443', protocol: 'https' },
+  ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
   web3Provider: 'wss://testcore.evan.network/ws',
 };
 
@@ -86,7 +86,7 @@ async function createRuntime() {
   web3.setProvider(new web3.providers.WebsocketProvider(runtimeConfig.web3Provider));
 
   // load SmartContracts from ipfs externally
-  const SmartContracts = await SystemJS.import('https://ipfs.evan.network/ipfs/QmdB15Kqy4Gwe1aSSS6grj5ftSaFbUktqVdB1G4wkBYP1G/compiled.js');
+  const SmartContracts = await SystemJS.import('https://ipfs.test.evan.network/ipfs/QmdB15Kqy4Gwe1aSSS6grj5ftSaFbUktqVdB1G4wkBYP1G/compiled.js');
   const keyProvider = new bcc.KeyProvider(runtimeConfig.accountMap);
   keyProvider.origin = keyProvider;
 
