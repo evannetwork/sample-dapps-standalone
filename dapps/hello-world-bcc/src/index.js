@@ -1,53 +1,18 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
 */
-
-// BCC core configuration
-const config = {
-  // web3Provider: 'ws://13.57.211.13:8546',
-  web3Provider: 'ws://localhost:8546',
-  nameResolver: {
-    ensAddress: '0x937bbC1d3874961CA38726E9cD07317ba81eD2e1',
-    ensResolver: '0xDC18774FA2E472D26aB91deCC4CDd20D9E82047e',
-    labels: {
-      businessCenterRoot: 'testbc.evan',
-      ensRoot: 'evan',
-      factory: 'factory',
-      admin: 'admin',
-      eventhub: 'eventhub',
-      profile: 'profile',
-      mailbox: 'mailbox'
-    },
-    domains: {
-      root: ['ensRoot'],
-      factory: ['factory', 'businessCenterRoot'],
-      adminFactory: ['admin', 'factory', 'ensRoot'],
-      businessCenter: ['businessCenterRoot'],
-      eventhub: ['eventhub', 'ensRoot'],
-      profile: ['profile', 'ensRoot'],
-      profileFactory: ['profile', 'factory', 'ensRoot'],
-      mailbox: ['mailbox', 'ensRoot'],
-    },
-  },
-  smartAgents: {
-    onboarding: {
-      accountId: '0x063fB42cCe4CA5448D69b4418cb89E663E71A139',
-    },
-  },
-  alwaysAutoGasLimit: 1.1,
-}
 
 // runtime configuration
 const runtimeConfig = {
@@ -60,51 +25,32 @@ const runtimeConfig = {
 };
 
 /**
- * Smart contracts solc representation.
- */
-Solc = function (SmartContracts) {
-  this.SmartContracts = SmartContracts;
-}
-
-Solc.prototype.getContracts = function() {
-  const shortenedContracts = {};
-
-  Object.keys(this.SmartContracts).forEach((key) => {
-    const contractKey = (key.indexOf(':') !== -1) ? key.split(':')[1] : key
-    shortenedContracts[contractKey] = this.SmartContracts[key]
-  })
-
-  return shortenedContracts;
-}
-
-/**
  * Create DBCP runtime.
  */
 async function createRuntime() {
   // initialize dependencies
-  const web3 = new Web3();
-  web3.setProvider(new web3.providers.WebsocketProvider(runtimeConfig.web3Provider));
+  const provider = new Web3.providers.WebsocketProvider(
+    runtimeConfig.web3Provider,
+    {clientConfig: {keepalive: true, keepaliveInterval: 5000}},
+  );
+  const web3 = new Web3(provider,
+    null,
+    {transactionConfirmationBlocks: 1}
+  );
+  const dfs = new bcc.Ipfs({remoteNode: new IpfsApi(runtimeConfig.ipfs)});
 
-  // load SmartContracts from ipfs externally
-  const SmartContracts = await SystemJS.import('https://ipfs.test.evan.network/ipfs/QmdB15Kqy4Gwe1aSSS6grj5ftSaFbUktqVdB1G4wkBYP1G/compiled.js');
-  const keyProvider = new bcc.KeyProvider(runtimeConfig.accountMap);
-  keyProvider.origin = keyProvider;
-
-  // initialize the bcc core runtime
-  await bcc.createAndSet({
-    accountId: Object.keys(runtimeConfig.accountMap)[0],
-    coreOptions: {
-      web3: web3,
-      solc: new Solc(SmartContracts),
-      dfsRemoteNode: bcc.IpfsRemoteConstructor(runtimeConfig.ipfs),
-      config: config,
-    },
-    keyProvider: keyProvider,
-    CoreBundle: bcc,
-    SmartContracts
+  const formattedContracts = {};
+  Object.keys(smartcontracts).forEach((key) => {
+      const contractKey = (key.indexOf(':') !== -1) ? key.split(':')[1] : key;
+      formattedContracts[contractKey] = smartcontracts[key];
   });
 
-  return bcc.CoreRuntime;
+  // create runtime
+  const runtime = await bcc.createDefaultRuntime(web3, dfs, runtimeConfig, {
+    contracts: formattedContracts,
+  });
+
+  return runtime;
 }
 
 /**
@@ -143,7 +89,7 @@ async function runHelloWorld() {
   if (!contractId || contractId.indexOf('0x') !== 0) {
     contractId = '';
 
-    document.getElementById('test-description').innerHTML = 'not set';
+    document.getElementById('contract-id').innerHTML = 'not set';
   } else {
     // load opened contract
     const contract = await runtime.description.loadContract(contractId);

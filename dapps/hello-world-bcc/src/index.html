@@ -1,12 +1,12 @@
 <!--
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,18 +37,12 @@
     <link rel="stylesheet" type="text/css" async href="https://fonts.googleapis.com/css?family=Open+Sans" />
 
     <!-- Loading BCC -->
-    <script src="https://ipfs.test.evan.network/ipns/Qme9gmKpueriR7qMH5SNW3De3b9AFBkUGvFMS8ve1SuYBy/bcc.js"></script>
-
-    <!-- Loading Web3 -->
-    <script src="https://ipfs.test.evan.network/ipfs/QmXVX173ygohnfg8rxzhynrNFHLTLKUqcBEKAFrEZGA9JN"></script>
-  
-    <!-- Loading ipfs-api -->
-    <script src="https://ipfs.test.evan.network/ipfs/QmczFSf23jB7RhT5ptnkycCf57hTGdfUE1Pa2qbZe4pmEN"></script>
-
-    <!-- Loading systemjs to be able to load smart contracts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.21.3/system-production.src.js"></script>
+    <script src="../node_modules/@evan.network/api-blockchain-core-browserified/dist/bcc.js"></script>
+    <script src="../node_modules/@evan.network/smart-contracts-core-browserified/dist/compiled.js"></script>
+    <script src="../node_modules/ipfs-api/dist/index.js"></script>
+    <script src="../lib/web3.min.js"></script>
   </head>
-  
+
   <body>
     <div>
       <h2>Hello World BCC</h2>

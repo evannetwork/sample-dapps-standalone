@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,13 +35,14 @@ gulp.task('serve', function () {
 
       app.use(`/${ splittedPath[splittedPath.length - 1] }`, express.static(`${ dapp }/src`));
     });
-
+  app.use('/node_modules', express.static(`../node_modules`))
+  app.use('/lib', express.static(`../lib`))
   app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
   });
-  
+
   app.listen(3000, function () {
     console.log('\nServer running on 3000...');
   });
