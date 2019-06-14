@@ -1,11 +1,10 @@
 {
   "license": "Apache-2.0",
   "dependencies": {
-    "@evan.network/api-blockchain-core-browserified": "latest",
-    "@evan.network/smart-contracts-core-browserified": "latest",
+    "@evan.network/dbcp": "latest",
     "express": "^4.16.2",
     "gulp": "^3.9.1",
-    "ipfs-api": "^17.5.0",
+    "ipfs-api": "^21.0.0",
     "web3": "1.0.0-beta.37"
   },
   "name": "@evan.network/sample-dapps-standalone",

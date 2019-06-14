@@ -1,12 +1,12 @@
 /*
   Copyright (c) 2018-present evan GmbH.
- 
+
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
- 
+
       http://www.apache.org/licenses/LICENSE-2.0
- 
+
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,45 +14,39 @@
   limitations under the License.
 */
 
-#!/usr/bin/env node
 const path = require('path')
 const { Ipfs, createDefaultRuntime, } = require('@evan.network/dbcp')
 const IpfsApi = require('ipfs-api')
 const Web3 = require('web3')
 const exec = require('child_process').exec
 
-async function deployIPFSFolder(folderPath) {
+const runtimeConfig = {
+  accountMap: {
+    '0x001De828935e8c7e4cb56Fe610495cAe63fb2612':
+      '01734663843202e2245e5796cb120510506343c67915eb4f9348ac0d8c2cf22a',
+  },
+  ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
+  web3Provider: 'wss://testcore.evan.network/ws',
+};
+
+
+async function deployIPFSFolder(ipfs, folderPath) {
   return new Promise((resolve, reject) => {
-    exec(`ipfs add -r ${folderPath}`, {
+    ipfs.util.addFromFs(folderPath, { recursive: true }, (err, result) => {
+      if (err) { throw err }
+      resolve(result[result.length -1].hash);
+    });
 
-    }, (err, stdout, stderr) => {
-      if (err) {
-        reject(err);
-      } else {
-        let folderHash = stdout.split('\n');
-
-        folderHash = folderHash[folderHash.length - 2].split(' ')[1];
-
-        resolve(folderHash);
-      }
-    })
   })
 }
 
-async function createRuntime() {
-  const runtimeConfig = {
-    accountMap: {
-      '0x001De828935e8c7e4cb56Fe610495cAe63fb2612':
-        '01734663843202e2245e5796cb120510506343c67915eb4f9348ac0d8c2cf22a',
-    },
-    ipfs: { host: 'ipfs.test.evan.network', port: '443', protocol: 'https' },
-    web3Provider: 'wss://testcore.evan.network/ws',
-  };
+async function createRuntime(ipfs) {
+
 
   // initialize dependencies
   const web3 = new Web3();
   web3.setProvider(new web3.providers.WebsocketProvider(runtimeConfig.web3Provider));
-  const dfs = new Ipfs({ remoteNode: new IpfsApi(runtimeConfig.ipfs), });
+  const dfs = new Ipfs({ remoteNode: ipfs, });
 
   // create runtime
   const runtime = await createDefaultRuntime(web3, dfs, { accountMap: runtimeConfig.accountMap, });
@@ -70,10 +64,9 @@ async function deployContract() {
   } catch (ex) {
     return console.error(`Could not find description file for "${ dappToDeploy }"`);
   }
-
-  const runtime = await createRuntime();
-  const folderHash = await deployIPFSFolder(`${ pathToDApp }/src`);
-
+  const ipfs = new IpfsApi(runtimeConfig.ipfs);
+  const runtime = await createRuntime(ipfs);
+  const folderHash = await deployIPFSFolder(ipfs, `${ pathToDApp }/src`);
   description.public.dapp.origin = folderHash;
 
   // we'll use this account for our transactions
