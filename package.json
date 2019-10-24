@@ -1,18 +1,10 @@
 {
-  "license": "Apache-2.0",
   "dependencies": {
     "@evan.network/dbcp": "latest",
     "express": "^4.16.2",
-    "gulp": "^3.9.1",
-    "ipfs-api": "^21.0.0",
-    "web3": "2.0.0-alpha"
+    "gulp": "^4.0.0",
+    "ipfs-api": "^21.0.0"
   },
-  "name": "@evan.network/sample-dapps-standalone",
-  "scripts": {
-    "deploy-to-contract": "node scripts/create-contract.js --dapp",
-    "serve": "gulp --gulpfile scripts/serve.js"
-  },
-  "version": "1.0.1",
   "keywords": [
     "javascript",
     "typescript",
@@ -22,5 +14,12 @@
     "DApp",
     "SASS",
     "tutorial"
-  ]
+  ],
+  "license": "Apache-2.0",
+  "name": "@evan.network/sample-dapps-standalone",
+  "scripts": {
+    "deploy-to-contract": "node scripts/create-contract.js --dapp",
+    "serve": "gulp --gulpfile scripts/serve.js"
+  },
+  "version": "1.0.1"
 }

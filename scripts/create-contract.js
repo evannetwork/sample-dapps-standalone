@@ -16,8 +16,8 @@
 
 const path = require('path')
 const { Ipfs, createDefaultRuntime, } = require('@evan.network/dbcp')
-const IpfsApi = require('ipfs-api')
 const Web3 = require('web3')
+const IpfsApi = require('ipfs-api')
 const exec = require('child_process').exec
 
 const runtimeConfig = {
@@ -29,24 +29,24 @@ const runtimeConfig = {
   web3Provider: 'wss://testcore.evan.network/ws',
 };
 
-
-async function deployIPFSFolder(ipfs, folderPath) {
+async function deployIPFSFolder(folderPath) {
   return new Promise((resolve, reject) => {
+    const ipfs = new IpfsApi(runtimeConfig.ipfs);
     ipfs.util.addFromFs(folderPath, { recursive: true }, (err, result) => {
       if (err) { throw err }
       resolve(result[result.length -1].hash);
     });
-
-  })
+  });
 }
 
 async function createRuntime(ipfs) {
-
-
   // initialize dependencies
-  const provider = new Web3.providers.WebsocketProvider(runtimeConfig.web3Provider);
-  const web3 = new Web3(provider, null, { transactionConfirmationBlocks: 1 });
-  const dfs = new Ipfs({ remoteNode: ipfs, });
+  const provider = new Web3.providers.WebsocketProvider(
+    runtimeConfig.web3Provider,
+    { clientConfig: { keepalive: true, keepaliveInterval: 5000 } },
+  );
+  const web3 = new Web3(provider, { transactionConfirmationBlocks: 1, protocol: [] })
+  const dfs = new Ipfs({ dfsConfig: runtimeConfig.ipfsConfig, remoteNode: new IpfsApi(runtimeConfig.ipfs), })
 
   // create runtime
   const runtime = await createDefaultRuntime(web3, dfs, { accountMap: runtimeConfig.accountMap, });
@@ -64,9 +64,9 @@ async function deployContract() {
   } catch (ex) {
     return console.error(`Could not find description file for "${ dappToDeploy }"`);
   }
-  const ipfs = new IpfsApi(runtimeConfig.ipfs);
-  const runtime = await createRuntime(ipfs);
-  const folderHash = await deployIPFSFolder(ipfs, `${ pathToDApp }/src`);
+
+  const runtime = await createRuntime();
+  const folderHash = await deployIPFSFolder(`${ pathToDApp }/src`);
   description.public.dapp.origin = folderHash;
 
   // we'll use this account for our transactions
@@ -83,7 +83,7 @@ async function deployContract() {
   const greeter = await runtime.executor.createContract('Greeter', [`Hello evan.network! ${Math.random()}`], { from, gas: 1000000, });
   console.log(`created contract: "${greeter.options.address}"`);
   // interface can be added from running contract instance (or kept as static abi in default value)
-  description.public.abis = { own: greeter.options.jsonInterface, };
+  description.public.abis = { own: JSON.parse(runtime.contractLoader.contracts['Greeter'].interface), };
   await runtime.description.setDescriptionToContract(greeter.options.address, description, from);
   const greeterAddress = greeter.options.address;
 

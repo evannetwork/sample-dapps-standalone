@@ -29,20 +29,17 @@ const runtimeConfig = {
  */
 async function createRuntime() {
   // initialize dependencies
-  const provider = new Web3.providers.WebsocketProvider(
+  const provider = new bcc.Web3.providers.WebsocketProvider(
     runtimeConfig.web3Provider,
-    {clientConfig: {keepalive: true, keepaliveInterval: 5000}},
+    { clientConfig: { keepalive: true, keepaliveInterval: 5000 } },
   );
-  const web3 = new Web3(provider,
-    null,
-    {transactionConfirmationBlocks: 1}
-  );
-  const dfs = new bcc.Ipfs({remoteNode: new IpfsApi(runtimeConfig.ipfs)});
+  const web3 = new bcc.Web3(provider, { transactionConfirmationBlocks: 1, protocol: [] })
+  const dfs = new bcc.Ipfs({ dfsConfig: runtimeConfig.ipfs })
 
   const formattedContracts = {};
   Object.keys(smartcontracts).forEach((key) => {
-      const contractKey = (key.indexOf(':') !== -1) ? key.split(':')[1] : key;
-      formattedContracts[contractKey] = smartcontracts[key];
+    const contractKey = (key.indexOf(':') !== -1) ? key.split(':')[1] : key;
+    formattedContracts[contractKey] = smartcontracts[key];
   });
 
   // create runtime
